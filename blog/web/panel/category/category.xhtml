@@ -1,0 +1,65 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+
+    <h:head>
+        <title>Facelet Title</title>
+        <h:outputStylesheet library="css" name="bootstrap.css"/>
+    </h:head>
+    <h:body>
+
+
+        <div class="container m-3">
+
+            <div class="row">
+                <div class="col">
+                    <h:form>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">Title</th>
+                                    <th scope="col">Administration</th> 
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <ui:repeat value="#{categoryBean.list}" var="e" >
+                                    <tr>
+
+                                        <td>#{e.id}</td>
+                                        <td>
+                                            <h:commandLink action="#{categoryBean.setEntity(e)}" value="#{e.title}"/> </td> 
+                                    </tr>
+                                </ui:repeat>
+                            </tbody>
+                        </table>
+                    </h:form>
+                </div>
+
+                <div class="col">
+                    <h:form>
+                        <div class="mb-3">
+                            <label>Title</label>
+                            <h:inputText value="#{categoryBean.entity.title}"  styleClass="form-control" />
+                        </div>
+                        <div class="mb-3">
+                            <h:commandButton styleClass="btn btn-success" rendered="#{categoryBean.entity.id == 0}" value="Kaydet" action="#{categoryBean.create()}" /> 
+                            <h:commandButton styleClass="btn btn-primary"  rendered="#{categoryBean.entity.id != 0}" value="Düzenle" action="#{categoryBean.update()}" /> 
+                            <h:commandButton styleClass="btn btn-danger"  rendered="#{categoryBean.entity.id != 0}" value="Sil" action="#{categoryBean.delete()}" />
+                             <h:commandButton styleClass="btn btn-secondary"  rendered="#{categoryBean.entity.id != 0}" value="Clear Form" action="#{categoryBean.clear()}" /> 
+
+                        </div>
+                    </h:form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </h:body>
+</html>

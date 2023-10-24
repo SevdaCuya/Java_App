@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Post</title>
+        <h:outputStylesheet library="css" name="bootstrap.css"/>
+    </h:head>
+    <h:body>
+        <h:form>
+            <h:commandButton value="Home" action="/index" /> 
+
+        </h:form>
+
+        <h:form>
+            <div class="container">
+                <div class="row">
+                    Category:
+                    <h:selectManyMenu value="#{postBean.entity.categories}" styleClass="  form-control"   >
+                        <f:selectItems value="#{categoryBean.list}" var="c" itemValue="#{c}" itemLabel="#{c.title}" />
+                    </h:selectManyMenu>
+
+                    Title: <h:inputText value="#{postBean.entity.title}" styleClass="form-control"   /> 
+
+                    Context: <h:inputTextarea row="3" value="#{postBean.entity.context}"  styleClass="form-control"   /> 
+
+                    <h:commandButton styleClass="btn btn-sm btn-success" rendered="#{postBean.entity.id == 0}" value="Kaydet" action="#{postBean.create()}" /> 
+                    <h:commandButton styleClass="btn btn-sm btn-primary" rendered="#{postBean.entity.id != 0}" value="Düzenle" action="#{postBean.update()}" /> 
+                    <h:commandButton styleClass="btn btn-sm btn-secondary" rendered="#{postBean.entity.id != 0}" value="Clear Form" action="#{postBean.clear()}" /> 
+                </div>
+            </div>
+        </h:form>
+
+        <h:form>
+            <h:dataTable border="1" styleClass="table table-striped" value="#{postBean.list}" var="entity" >
+                <h:column>
+                    <f:facet name="header">ID</f:facet>
+                        #{entity.id}
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">CATEGORIES</f:facet>
+                    <ul>
+                        <ui:repeat value="#{entity.categories}" var="k">
+                            <li>#{k.title} </li>                        
+                        </ui:repeat>
+                    </ul>
+
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Title</f:facet>
+                        #{entity.title}
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">İşlemler</f:facet>
+                    <h:commandButton styleClass="btn btn-sm btn-primary"  value="Sil"  action="#{postBean.delete(entity)}" /> 
+                    <h:commandButton styleClass="btn btn-sm btn-danger"  value="Düzenle"  action="#{postBean.setEntity(entity)}" /> 
+
+                </h:column>
+
+            </h:dataTable>
+        </h:form>
+    </h:body>
+</html>
