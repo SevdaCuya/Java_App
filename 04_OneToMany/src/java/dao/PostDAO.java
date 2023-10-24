@@ -4,6 +4,7 @@
  */
 package dao;
 
+import entity.Category;
 import entity.Post;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -17,11 +18,13 @@ import java.util.List;
 public class PostDAO extends DBConnection {
 
     Post c;
+    Category a;
+    CategoryDAO categoryDao;
 
     public void create(Post c) {
         try {
-            Statement st = this.connect().createStatement();
-            String query = "insert into post (category_id,title,context) values (" + c.getCategory_id() + ",'" + c.getTitle() + "','" + c.getContext() + "')";
+            Statement st = this.getConnection().createStatement();
+            String query = "insert into post (category_id,title,context) values (" + c.getCategory().getId() + ",'" + c.getTitle() + "','" + c.getContext() + "')";
             st.executeUpdate(query);
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -31,8 +34,8 @@ public class PostDAO extends DBConnection {
     public void update(Post c) {
 
         try {
-            Statement st = this.connect().createStatement();
-            String query = "update post set category_id=' " + c.getCategory_id() + "', title='" + c.getTitle() + "', context='" + c.getContext() + "'where id=" + c.getId();
+            Statement st = this.getConnection().createStatement();
+            String query = "update post set category_id=' " + c.getCategory().getId() + "', title='" + c.getTitle() + "' , context='" + c.getContext() + "'where id=" + c.getId();
             st.executeUpdate(query);
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -43,7 +46,7 @@ public class PostDAO extends DBConnection {
     public void delete(Post c) {
 
         try {
-            Statement st = this.connect().createStatement();
+            Statement st = this.getConnection().createStatement();
             String query = "delete from post where id= " + c.getId();
             st.executeUpdate(query);
         } catch (Exception e) {
@@ -55,17 +58,29 @@ public class PostDAO extends DBConnection {
     public List<Post> getList() {
         List<Post> list = new ArrayList<>();
         try {
-            Statement st = this.connect().createStatement();
+            Statement st = this.getConnection().createStatement();
             String query = "select * from post";
             ResultSet rs = st.executeQuery(query);
-
+           
             while (rs.next()) {
-                list.add(new Post(rs.getInt("id"), rs.getInt("category_id"), rs.getString("title"), rs.getString("context")));
+                 a = this.getCategoryDao().findById(rs.getInt("category_id"));
+                list.add(new Post(rs.getInt("id"),a , rs.getString("title"), rs.getString("context")));
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
 
         return list;
+    }
+
+    public CategoryDAO getCategoryDao() {
+        if(categoryDao==null){
+        categoryDao=new CategoryDAO();
+        }
+        return categoryDao;
+    }
+
+    public void setCategoryDao(CategoryDAO categoryDao) {
+        this.categoryDao = categoryDao;
     }
 }

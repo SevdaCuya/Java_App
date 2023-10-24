@@ -3,16 +3,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package entity;
- 
 
 /**
  *
  * @author sevda.cuya
  */
 public class Category {
-
-    private int id;
-    private String title; 
+     private int id;
+    private  String title;
 
     public Category() {
     }
@@ -38,4 +36,26 @@ public class Category {
         this.title = title;
     }
 
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 79 * hash + this.id;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Category other = (Category) obj;
+        return this.id == other.id;
+    }
+    
 }
